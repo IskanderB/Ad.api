@@ -1,0 +1,55 @@
+paths:
+    api/v1/ads/{id}:
+        get:
+            parameters:
+            - in: path
+              name: id
+              schema:
+                  type: integer
+              required: true
+            - in: query
+              name: fields
+              required: false
+              description: 0 or empty - short result, other - full result
+            summary: "Getting one ad by id"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            name:
+                                                type: string
+                                                example: "Test Name"
+                                            cost:
+                                                type: integer
+                                                example: 1000
+                                            link:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "https://i.picsum.photos/id/322/1024/512.jpg?hmac=F1mtOg9RTL9NJwRDm3kvctyBq0bwBy0GScgZ_dLzadc"
+                                            description:
+                                                type: string
+                                                example: "Test description"
+                                    next:
+                                        type: string
+                                        example: ""
+                404:
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The id must be an integer."
+
+

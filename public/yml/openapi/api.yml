@@ -1,0 +1,22 @@
+openapi: 3.0.1
+
+info:
+    version: 1.0.0
+    title: 'API documentation for ad.api'
+servers:
+  - url: http://ad.api.ru/
+paths:
+    /api/v1/ads:        
+        post:
+            $ref: "./paths/ads/post/ads.yml#/paths/api~1v1~1ads/post"
+        get:
+           $ref: "./paths/ads/get/all.yml#/paths/api~1v1~1ads/get" 
+    /api/v1/ads/{id}:
+        get:
+            $ref: "./paths/ads/get/one.yml#/paths/api~1v1~1ads~1{id}/get" 
+
+                                            
+                    
+                               
+    
+    

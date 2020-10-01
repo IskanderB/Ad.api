@@ -1,0 +1,83 @@
+paths:
+    api/v1/ads:        
+        post:
+            summary: "Insert a new ad"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Example Name"
+                                description:
+                                    type: string
+                                    example: "Example Description"
+                                cost:
+                                    type: integer
+                                    example: 1000
+                                general_link:
+                                    type: string
+                                    example: "https://i.picsum.photos/id/322/1024/512.jpg?hmac=F1mtOg9RTL9NJwRDm3kvctyBq0bwBy0GScgZ_dLzadc"
+                                    description: Link to general image
+                                other_link_1:
+                                    type: string
+                                    example: "https://i.picsum.photos/id/342/1024/512.jpg?hmac=bVhx_XZzGlaQ30DYFSBesYztTiNvXBv1A-ErMPe1Y0c"
+                                    description: Link to first aditional image
+                                other_link_2:
+                                    type: string
+                                    example: "https://i.picsum.photos/id/154/1024/512.jpg?hmac=7fYk-26to07ZVCiL4IkSk_zmIacl2wPQGn8k9jA_O64"
+                                    description: Link to second aditional image
+            responses:
+                201:
+                    content:
+                       application/json:
+                           schema:
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: integer
+                                                example: 1
+                                    next:
+                                        type: string
+                                        example: ""
+                400:
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            name:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The name field is required."
+                                            description:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The description field is required."
+                                            cost:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The cost field is required."
+                                            general_link:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The general link format is invalid."
+                                            other_link_1:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The other_link_1 link format is invalid."
+                                            other_link_2:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                    example: "The other_link_2 link format is invalid."

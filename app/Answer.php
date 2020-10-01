@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Controller for sending responses
+ * Model for sending responses
  * 
  * This model build json respons and send it
  * 
@@ -37,9 +37,9 @@ class Answer extends Model
      * @param array|boolean $data
      * @param string $next
      * @param boolean $forse
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function returnResponse($typeRequest,  $data = '', $next = '', $forse = false) : \Illuminate\Http\Response {
+    public function returnResponse(string $typeRequest,  $data = '', string $next = '', bool $forse = false) : \Illuminate\Http\JsonResponse {
         
         if (empty($data)) {
             $status = false;

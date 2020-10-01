@@ -21,7 +21,7 @@ class AdController extends Controller
 {
     /**
      *
-     * @var type Ad
+     * @var Ad
      */
     private $model;
     
@@ -33,7 +33,7 @@ class AdController extends Controller
      * Get one of table ads with match rows from table links
      * 
      * @param Request $request
-     * @return type Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     
     public function getOne(Request $request) : \Illuminate\Http\JsonResponse {
@@ -50,7 +50,7 @@ class AdController extends Controller
         }
         
         // Get one of ads
-        $adDB = $this->model->selectOne($request->id, $request->fields);
+        $adDB = $this->model->selectOne($request->id, $request->fields ?? false);
         
         if (empty($adDB)) {
             return $this->response($adDB, $typeRequest);
@@ -83,7 +83,7 @@ class AdController extends Controller
     /**
      * 
      * @param Request $request
-     * @return type Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     
     public function getAll(Request $request) : \Illuminate\Http\JsonResponse {
@@ -109,7 +109,7 @@ class AdController extends Controller
     /**
      * 
      * @param Request $request
-     * @return type Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     
     public function create(Request $request) : \Illuminate\Http\JsonResponse {
@@ -143,7 +143,7 @@ class AdController extends Controller
      * @return boolean|\Illuminate\Support\MessageBag
      */
     
-    private function validator($request, $rules) {
+    private function validator(array $request, array $rules) {
         $validator = \Validator::make($request, $rules);
         if ($validator->fails()) {
             return $validator->errors();
@@ -157,10 +157,10 @@ class AdController extends Controller
      * @param string $typeRequest
      * @param string $next
      * @param boolean $forse
-     * @return Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     
-    private function response($data, $typeRequest, $next = '', $forse = false) : \Illuminate\Http\JsonResponse {
+    private function response($data, string $typeRequest, string $next = '', bool $forse = false) : \Illuminate\Http\JsonResponse {
         $resposne = new Answer();
 
         return $resposne->returnResponse($typeRequest, $data, $next, $forse);

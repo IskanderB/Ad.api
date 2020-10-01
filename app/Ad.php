@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Link;
 
 /**
- * Controller for getting and inserting ad data
+ * Model for getting and inserting ad data
  * 
  * This model transform enter data, 
  * get one row
@@ -22,7 +22,7 @@ class Ad extends Model
     /**
      * Content array names columns for getting from DB normaly
      * 
-     * @var type array
+     * @var array
      */    
     private $baseColumns = [
         'ads.name',
@@ -33,7 +33,7 @@ class Ad extends Model
     /**
      * Content array names columns for getting from DB additionaly for normal
      * 
-     * @var type array
+     * @var array
      */   
     private $additionalColumns = [
         'ads.description',
@@ -42,7 +42,7 @@ class Ad extends Model
     /**
      * Default sorting params
      * 
-     * @var type array
+     * @var array
      */
     private $defaultValues = [
         'sort' => 'created_at',
@@ -53,7 +53,7 @@ class Ad extends Model
     /**
      * Default values for links general column
      * 
-     * @var type array
+     * @var array
      */
     private $availableLinks = [
         'general_link' => 1,
@@ -63,11 +63,11 @@ class Ad extends Model
     
     /**
      * 
-     * @param array|boolean $data
-     * @return boolean
+     * @param array $data
+     * @return integer
      */
     
-    public function insertOne($data) : bool {
+    public function insertOne(array $data) : array {
  
         $id = $this->insertGetId([
             'name' => $data['name'],
@@ -77,7 +77,7 @@ class Ad extends Model
         
         $result = $this->insertLinks($data, $id);
 
-        return $id and $result;
+        return ['id' => $id];
     }
     
     /**
@@ -86,20 +86,35 @@ class Ad extends Model
      * @param integer $id
      * @return boolean
      */
-    function insertLinks($data, $id) : bool {
+    function insertLinks(array $data, int $id) : bool {
         //Build links array for sending to DB
-        $links = [];
-        foreach ($this->availableLinks as $key => $value) {
-            if (isset($data[$key])) {
-                $links[] = ['link' => $data[$key], 'ad_id' => $id];
-            }
-        }
+        $links = $this->buildLinksData($data, $id);
+        
         
         if (!empty($links)) {
             $link = new Link();
             return $link->insert($links);
         }
         return true;
+    }
+    
+    /**
+     * Prepares data for pass to DB.
+     * Create array contain:
+     * ['link' => ..., 'ad_id' => ...]
+     * 
+     * @param array $data
+     * @param int $id
+     * @return array
+     */
+    private function buildLinksData(array $data, int $id) : array {
+        $links = [];
+        foreach ($this->availableLinks as $key => $value) {
+            if (isset($data[$key])) {
+                $links[] = ['link' => $data[$key], 'ad_id' => $id];
+            }
+        }
+        return $links;
     }
     
     /**
@@ -111,7 +126,7 @@ class Ad extends Model
      * @return array
      */
     
-    public function selectAll($sort, $way, $number, $uri) : array {
+    public function selectAll($sort, $way, $number, string $uri) : array {
         // Set default values in sorting params
         if (!$sort) $sort = $this->defaultValues['sort'];
         if (!$way) $way = $this->defaultValues['way'];
@@ -145,7 +160,7 @@ class Ad extends Model
      * @return array|boolean
      */
     
-    public function selectOne($id, $fields) {
+    public function selectOne(int $id, bool $fields) : array {
         return $this->chooseColumns($id, $fields);        
     }
     
@@ -159,7 +174,7 @@ class Ad extends Model
      * @return array|boolean
      */
     
-    private function selectOneDB($id, $columns, $limit, $where, $orWhere) {
+    private function selectOneDB(int $id, array $columns, int $limit, array $where, array $orWhere) : array {
         return  \DB::table('ads')
                 ->leftJoin('links', 'ads.id', '=', 'links.ad_id')
                 ->where($where)
@@ -176,7 +191,7 @@ class Ad extends Model
      * @return array|boolean
      */
     
-    private function chooseColumns($id, $fields) {
+    private function chooseColumns(int $id, bool $fields) : array {
         // Check fielsds param to choose 
         // get usial set or full set
         if ($fields) {
@@ -202,21 +217,5 @@ class Ad extends Model
         }
         
         return $this->selectOneDB($id, $columns, $limit, $where, $orWhere);
-    }
-    
-    /**
-     * 
-     * @param array|boolean $data
-     * @param string $typeRequest
-     * @param string $next
-     * @return Illuminate\Http\Response
-     */
-    
-    private function response($data, $typeRequest, $next = '') : Illuminate\Http\Response {
-        $resposne = new Answer();
-
-        return $resposne->returnResponse($typeRequest, $data, $next);
-    }
-    
-    
+    }     
 }
