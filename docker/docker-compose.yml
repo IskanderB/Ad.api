@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+    web:
+        build: ./web
+        restart: always
+        environment:
+            - APACHE_RUN_USER=#1000
+        volumes:
+            - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+        ports:
+            - 10080:80
+        working_dir: ${APP_PATH_CONTAINER}
+
+    db:
+        build: ./db
+        command: --innodb_use_native_aio=0
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: star
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: pass
+        volumes:
+            - ${DB_PATH_HOST}:/var/lib/mysql
+    phpmyadmin:
+        build: ./phpmyadmin
+        restart: always
+        ports:
+            - 10081:80
+        environment:
+            - PMA_ARBITRARY=1
+    composer:
+        image: composer
+        volumes:
+            - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+        working_dir: ${APP_PATH_CONTAINER}
+        command: composer install
