@@ -2,7 +2,7 @@ version: "3"
 
 services:
 
-    web:
+    web_ad:
         build: ./web
         restart: always
         environment:
@@ -13,7 +13,7 @@ services:
             - 10080:80
         working_dir: ${APP_PATH_CONTAINER}
 
-    db:
+    db_ad:
         build: ./db
         command: "--innodb_use_native_aio=0 --default-authentication-plugin=mysql_native_password"
         restart: always
@@ -22,8 +22,10 @@ services:
             MYSQL_DATABASE: ad.api_db
         volumes:
             - ${DB_PATH_HOST}:/var/lib/mysql
-            
-    phpmyadmin:
+
+    phpmyadmin_ad:
+        depends_on:
+            - db_ad
         build: ./phpmyadmin
         restart: always
         ports:
@@ -31,7 +33,7 @@ services:
         environment:
             - PMA_ARBITRARY=1
 
-    composer:
+    composer_ad:
         image: composer
         volumes:
             - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
