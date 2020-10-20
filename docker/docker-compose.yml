@@ -24,13 +24,15 @@ services:
             - ${DB_PATH_HOST}:/var/lib/mysql
 
     phpmyadmin_ad:
-        depends_on:
-            - db_ad
         build: ./phpmyadmin
+        links:
+            - db_ad
         restart: always
         ports:
             - 10081:80
         environment:
+            - PMA_HOST=db_ad
+            - PMA_PORT=3306
             - PMA_ARBITRARY=1
 
     composer_ad:

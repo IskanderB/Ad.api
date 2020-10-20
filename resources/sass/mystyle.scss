@@ -1,0 +1,25 @@
+.container{
+    .row{
+        .wrap{
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            .box{
+                display: inline-block;
+                max-width: 450px;
+                float: none;
+                padding: 30px 30px 30px 30px;
+                text-align: left;
+                background-color: #E7E7E7;
+                border-radius: 10px;
+                margin-left: 20px;
+                margin-right: 20px;
+                .button_box{
+                    margin-top: 20px;
+                    justify-content: center;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

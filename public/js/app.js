@@ -19330,7 +19330,24 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // Set box in height center
+
+
+var clientHeight = document.documentElement.clientHeight;
+var boxHeight = $(".wrap")[0].offsetHeight;
+var marginTop = 0.8 * (clientHeight - boxHeight) / 2 + "px";
+$(".wrap")[0].style.marginTop = marginTop; // Set current documentation link in <a>
+
+var a = document.getElementsByClassName('documentation_link');
+
+for (var i = 0; i < a.length; i++) {
+  a[i].href = '/documentation';
+} // Set host name to label
+
+
+var host = location.hostname;
+var label = document.getElementById('host_name');
+label.innerText = host;
 
 /***/ }),
 

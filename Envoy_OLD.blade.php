@@ -27,27 +27,6 @@
   echo "#1 - Repository has been cloned"
 @endtask
 
-
-@task('composer', ['on' => $on])
-  cd {{$release}}
-  composer install --no-interaction --no-dev --prefer-dist
-  echo "#2 - Composer dependencies have been installed"
-@endtask
-
-@task('artisan', ['on' => $on])
-  cd {{$release}}
-
-  ln -nfs {{$path}}/.env .env;
-  chgrp -h www-data .env;
-
-  php artisan config:clear
-
-
-  php artisan clear-compiled --env=production;
-
-  echo "#3 - Production dependencies have been installed"
-@endtask
-
 @task('chmod', ['on' => $on])
   chgrp -R www-data {{$release}};
   chmod -R ug+rwx {{$release}};
@@ -71,8 +50,6 @@
 
 @macro('deploy', ['on' => 'production'])
   clone
-  composer
-  artisan
   chmod
   update_symlinks
 @endmacro
